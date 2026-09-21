@@ -1,0 +1,13 @@
+#include <stdio.h>
+
+int main(void) {
+    int code = 2;
+    switch (code) {
+        case 0: printf("OK\n");        break;
+        case 1: printf("E_IO\n");      break;
+        case 2: printf("E_TIMEOUT\n"); break;
+        case 3: printf("E_BUSY\n");    break;
+        default: printf("?\n");        break;
+    }
+    return 0;
+}
