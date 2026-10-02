@@ -3,11 +3,10 @@ services:
     build: .
     ports:
       - "5000:5000"
-    environment:
-      DATABASE_URL: postgresql://user:pass@db:5432/mydb
-    networks:
-      - frontend
-      - backend
+    env_file:
+      - .env
+    depends_on:
+      - db
 
   db:
     image: postgres:15
@@ -15,10 +14,8 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: mydb
-    networks:
-      - backend
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
-networks:
-  frontend:
-  backend:
-    internal: true
+volumes:
+  pgdata:

@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  web:
+    image: localhost:5001/my-flask-app:latest
+    ports:
+      - "5000:5000"
+    environment:
+      APP_ENV: production
+      DATABASE_URL: postgresql://user:pass@db:5432/mydb
+    networks:
+      - backend
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+        failure_action: rollback
+      restart_policy:
+        condition: on-failure
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: mydb
+    networks:
+      - backend
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+volumes:
+  pgdata:
+
+networks:
+  backend:
